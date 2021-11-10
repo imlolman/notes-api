@@ -18,6 +18,11 @@ app.use(morgan('dev'))
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
 
+// Added this to allow the front end to check the status of the api server
+app.get('/', (_, res) => {
+    return res.status(200).json({ message: 'success'}) 
+})
+
 app.use('/api', apiRoutes)
 
 app.use((err, req, res, next) => {

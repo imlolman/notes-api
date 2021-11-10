@@ -1,28 +1,29 @@
 const Note = require('../models/notes')
 const AppError = require('../lib/error')
 
-const createNote = async (title, desc) => {
+const createNote = async (title, desc, userId) => {
     const note = await Note.create({
         title,
-        desc
+        desc,
+        userId
     })
     return note
 }
 
-const getNotes = async () => {
-    return await Note.find({})
+const getNotes = async (userId) => {
+    return await Note.find({userId})
 }
 
-const getNoteById = async (noteId) => {
-    const note = await Note.findOne({ _id: noteId })
+const getNoteById = async (noteId, userId) => {
+    const note = await Note.findOne({ _id: noteId, userId })
     if (!note) {
         throw new AppError('Note not found!', 404)
     }
     return note
 }
 
-const modifyNote = async (noteId, payload) => {
-    const note = await Note.findOne({ _id: noteId })
+const modifyNote = async (noteId, payload, userId) => {
+    const note = await Note.findOne({ _id: noteId, userId })
     if (!note) {
         throw new AppError('Note not found!', 404)
     }
@@ -39,8 +40,8 @@ const modifyNote = async (noteId, payload) => {
     return await Note.findOneAndUpdate({ _id: noteId }, query, { new: true })
 }
 
-const deleteNote = async (noteId) => {
-    return await Note.deleteOne({ _id: noteId })
+const deleteNote = async (noteId, userId) => {
+    return await Note.deleteOne({ _id: noteId, userId })
 }
 
 module.exports = {
